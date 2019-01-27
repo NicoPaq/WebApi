@@ -1,0 +1,144 @@
+﻿
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="chart1">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="chart2">
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="chart3">
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.0.3.js" integrity="sha256-lCf+LfUffUxr81+W0ZFpcU0LQyuZ3Bj0F2DQNCxTgSI=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+    google.load("visualization", "1", { packages: ['corechart', 'bar', 'line'] });
+    $(document).ready(function () {
+        $.ajaxSetup({ cache: false });
+        resize();
+        GetData();
+        google.setOnLoadCallback(GetData);
+    });
+
+    function resize() {
+        $(window).resize(function () {
+            GetData();
+        });
+    }
+
+    function GetData() {
+        $.ajax({
+            type: "GET",
+            contentType: "application/json",
+            url: 'http://localhost:53889/GetDashboard',
+            success: function (dataFromController) {
+                google.setOnLoadCallback(SetChart1(dataFromController.lstCharts1));
+                google.setOnLoadCallback(SetChart2(dataFromController.lstCharts2));
+                google.setOnLoadCallback(SetChart3(dataFromController.lstCharts3));
+            },
+            error: function (data) {
+                alert("An error occurs during the process of your request, please try to refresh the page.", "danger");
+            }
+        });
+    }
+
+    function SetChart1(dataFromController) {
+        var data = google.visualization.arrayToDataTable
+            ([['Value', 'NPS Score', { 'type': 'string', 'role': 'style' }],
+            [dataFromController[0].DayLib, dataFromController[0].NpsScore, dataFromController[0].Css],
+            [dataFromController[1].DayLib, dataFromController[1].NpsScore, dataFromController[1].Css],
+            [dataFromController[2].DayLib, dataFromController[2].NpsScore, dataFromController[2].Css],
+            [dataFromController[3].DayLib, dataFromController[3].NpsScore, dataFromController[3].Css],
+            [dataFromController[4].DayLib, dataFromController[4].NpsScore, dataFromController[4].Css],
+            [dataFromController[5].DayLib, dataFromController[5].NpsScore, dataFromController[5].Css],
+            [dataFromController[6].DayLib, dataFromController[6].NpsScore, dataFromController[6].Css],
+            [dataFromController[7].DayLib, dataFromController[7].NpsScore, dataFromController[7].Css],
+            [dataFromController[8].DayLib, dataFromController[8].NpsScore, dataFromController[8].Css],
+            [dataFromController[9].DayLib, dataFromController[9].NpsScore, dataFromController[9].Css],
+            [dataFromController[10].DayLib, dataFromController[10].NpsScore, dataFromController[10].Css],
+            [dataFromController[11].DayLib, dataFromController[11].NpsScore, dataFromController[11].Css]
+            ]);
+
+        var byH = { gridlines: { color: 'transparent' } };
+        var byX = { ticks: [-100, -50, -0, 50, 100], viewWindow: { min: -120, max: 120 } }
+
+        var options = {
+            hAxis: byH,
+            vAxis: byX,
+            colors: ['#132A34'],
+            legend: { position: 'bottom' },
+            curveType: 'function',
+            pointSize: 5
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById("chart1"));
+        chart.draw(data, options);
+    }
+
+    function SetChart2(dataFromController) {
+        var data2 = google.visualization.arrayToDataTable([
+            ['Month', 'Detractors', 'Passive', 'Promoters'],
+            ['Jan.', dataFromController[0].PourcentageDetractor, dataFromController[0].PourcentagePassive, dataFromController[0].PourcentageActive],
+            ['Feb.', dataFromController[1].PourcentageDetractor, dataFromController[1].PourcentagePassive, dataFromController[1].PourcentageActive],
+            ['Mar.', dataFromController[2].PourcentageDetractor, dataFromController[2].PourcentagePassive, dataFromController[2].PourcentageActive],
+            ['Apr.', dataFromController[3].PourcentageDetractor, dataFromController[3].PourcentagePassive, dataFromController[3].PourcentageActive],
+            ['May', dataFromController[4].PourcentageDetractor, dataFromController[4].PourcentagePassive, dataFromController[4].PourcentageActive],
+            ['Jun.', dataFromController[5].PourcentageDetractor, dataFromController[5].PourcentagePassive, dataFromController[5].PourcentageActive],
+            ['Jul.', dataFromController[6].PourcentageDetractor, dataFromController[6].PourcentagePassive, dataFromController[6].PourcentageActive],
+            ['Aug.', dataFromController[7].PourcentageDetractor, dataFromController[7].PourcentagePassive, dataFromController[7].PourcentageActive],
+            ['Sep.', dataFromController[8].PourcentageDetractor, dataFromController[8].PourcentagePassive, dataFromController[8].PourcentageActive],
+            ['Oct.', dataFromController[9].PourcentageDetractor, dataFromController[9].PourcentagePassive, dataFromController[9].PourcentageActive],
+            ['Nov.', dataFromController[10].PourcentageDetractor, dataFromController[10].PourcentagePassive, dataFromController[10].PourcentageActive],
+            ['Dec.', dataFromController[11].PourcentageDetractor, dataFromController[11].PourcentagePassive, dataFromController[11].PourcentageActive]
+        ]);
+
+        var options = {
+            colors: ['#A60D12', '#F8CD08', '#5EAF00'],
+            legend: { position: 'none' }
+        };
+        var chart = new google.visualization.ComboChart(document.getElementById("chart2"));
+        chart.draw(data2, options);
+    }
+
+    function SetChart3(dataFromController) {
+        var data3 = google.visualization.arrayToDataTable([
+            ['Score', 'Score Vote', { role: 'style' }],
+            ['0', dataFromController[0].ScoreValue, 'color:#A60D12; fill-color: #A60D12'],
+            ['1', dataFromController[1].ScoreValue, 'color:#A60D12; fill-color: #A60D12'],
+            ['2', dataFromController[2].ScoreValue, 'color:#A60D12; fill-color: #A60D12'],
+            ['3', dataFromController[3].ScoreValue, 'color:#A60D12; fill-color: #A60D12'],
+            ['4', dataFromController[4].ScoreValue, 'color:#A60D12; fill-color: #A60D12'],
+            ['5', dataFromController[5].ScoreValue, 'color:#A60D12; fill-color: #A60D12'],
+            ['6', dataFromController[6].ScoreValue, 'color:#A60D12; fill-color: #A60D12'],
+            ['7', dataFromController[7].ScoreValue, 'color:#F8CD08; fill-color: #F8CD08'],
+            ['8', dataFromController[8].ScoreValue, 'color:#F8CD08; fill-color: #F8CD08'],
+            ['9', dataFromController[9].ScoreValue, 'color:#5EAF00; fill-color: #5EAF00'],
+            ['10', dataFromController[10].ScoreValue, 'color:#5EAF00; fill-color: #5EAF00']
+        ]);
+
+        var options3 = {
+            bars: 'horizontal',
+            legend: { position: 'none' }
+        };
+
+        var chart3 = new google.visualization.BarChart(document.getElementById("chart3"));
+        chart3.draw(data3, options3);
+    }
+</script>

@@ -8,24 +8,21 @@ namespace WebApi.Models
 {
     public class UserProductModel
     {
-        [Display(Name = "ID Produit")]
-        [Required(ErrorMessage = "* This field is required")]
+        [Display(Name = "Product ID")]
         public int Id { get; set; }
 
-        [Display(Name = "Nom Produit")]
-        [Required(ErrorMessage = "* This field is required")]
+        [Display(Name = "Product Name")]
+        [Required(ErrorMessage = "Product Name field is required")]
         public string ProductName { get; set; }
 
-        [Display(Name = "Catégorie")]
-        [Required(ErrorMessage = "* This field is required")]
+        [Display(Name = "Category")]
         public string Category { get; set; }
 
         [Display(Name = "Price")]
-        [Required(ErrorMessage = "* This field is required")]
-        public int Price { get; set; }
+        [Required(ErrorMessage = "Price field is required")]
+        public decimal Price { get; set; }
 
         [Display(Name = "Model")]
-        [Required(ErrorMessage = "* This field is required")]
         public string Model { get; set; }
     }
 }

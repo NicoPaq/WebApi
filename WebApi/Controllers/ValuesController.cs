@@ -7,6 +7,8 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
+
+    // On trouve ici tout ce qui est propre à l'API Produits.
     public class ValuesController : ApiController
     {
         // GET api/values
