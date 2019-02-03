@@ -15,3 +15,8 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.customback {
+    background-color: #343a40;
+    padding: 20px;
+}

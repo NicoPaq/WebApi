@@ -35,13 +35,59 @@
     <input type="button" value="Search" onclick="find();" />
     <p id="product" />
 </div>
+
+<div class="row">
+    <div class="col-md-12">
+        <form id="myForm">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="customback">
+                        @Html.ActionLink("Get Files", "GetXlsFile", "Home", new { area = "" }, new { @class = "btn btn-default" })
+                    </div>   
+                </div>
+                <div class="col-sm-4">
+                    <div class="customback">
+                        <input type="file" name="FileUpload1" id="fileUpload" class="form-control btn btn-default">
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="customback">
+                        <input type="button" id="btnUploadFile" value="Upload File" class="form-control btn btn-primary" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 @{
     var path = CUtil.GetValueBaseOnKey("apiBaseUrl");
     var productPath = path + CUtil.GetValueBaseOnKey("ProductUrl");
 }
 <script src="https://code.jquery.com/jquery-2.0.3.js" integrity="sha256-lCf+LfUffUxr81+W0ZFpcU0LQyuZ3Bj0F2DQNCxTgSI=" crossorigin="anonymous"></script>
 <script>
+
+    function BindUpload() {
+        $("#btnUploadFile").on("click", function () {
+            var frmDt = new FormData(document.getElementById('myForm'));
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Upload","Home")',
+                contentType: false,
+                processData: false,
+                data: frmDt,
+                success: function (data) {
+                    alert(data);
+                },
+                error: function (data) {
+                    alert(data);
+                }
+            });
+        });
+    }
+
     $(document).ready(function () {
+        BindUpload();
         // Send an Ajax Request
         $.getJSON('@productPath' + 'GetAll')
             .done(function (data) {
